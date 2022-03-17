@@ -14,3 +14,20 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+  color: #000;
+}
+
+.css-18st3fs-MuiButtonBase-root-MuiButton-root {
+  color: #000;
+}
+
+.css-1f5ro5o-MuiButtonBase-root-MuiButton-root {
+  background: #000;
+}
+
+.css-1f5ro5o-MuiButtonBase-root-MuiButton-root:hover {
+  background: #000;
+  opacity: 0.7;
+}

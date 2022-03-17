@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
+import VerticalLinearStepper from "./runner-stepper/stepper";
 
 const Home: NextPage = () => {
   return (
@@ -11,15 +12,10 @@ const Home: NextPage = () => {
         </h1>
 
         <p className={styles.description}>
-          Trigger development tasks &rarr;
           <code className={styles.code}>npm beta</code>
         </p>
 
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <h2>Set Config Data</h2>
-          </div>
-        </div>
+        <VerticalLinearStepper/>
       </main>
 
       <footer className={styles.footer}>
