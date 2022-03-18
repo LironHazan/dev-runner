@@ -1,22 +1,33 @@
 import * as React from 'react';
 import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
-import {List, ListItem, ListItemText, TextField} from "@mui/material";
+import {Alert, List, ListItem, ListItemText, TextField} from "@mui/material";
 import styles from '../../styles/Stepper.module.css'
+import {setRunnableProject} from "../api/dev-runner-api";
 
 
 export default function StepOneContent() {
 
+    const [errMsg, setError] = React.useState('');
     const [path, setPath] = React.useState('');
     const [paths, setPaths] = React.useState(['']);
 
-    const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => setPath(event.target.value);
+    const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+        setError('');
+        setPath(event.target.value);
+    }
 
     const onEnterEvt = (event: { key: string; }) => event.key === 'Enter' && addPath();
 
-    const addPath = () => {
+    const addPath = async () => {
         if (paths.length < 5 && !paths.includes(path)) {
-            setPaths([...paths, path])
+            try {
+                const response = await setRunnableProject(path);
+                // Won't push new path in case its invalid
+                response && setPaths([...paths, path]);
+            } catch (e) {
+                setError('Invalid filepath!');
+            }
         }
     }
 
@@ -36,7 +47,8 @@ export default function StepOneContent() {
                     onChange={handleChange}
                     label="Enter full project path"
                     variant="standard" />
-                <Button variant="text" onClick={addPath}>Add another path</Button>
+                { errMsg !== '' ? <Alert className={styles.alertPos} severity="error">{errMsg}</Alert> : null }
+                <Button className={styles.btnPos} variant="text" onClick={addPath}>Add path</Button>
                 <List dense={true}>
                     {renderPaths()}
                 </List>

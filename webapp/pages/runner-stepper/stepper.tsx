@@ -13,7 +13,7 @@ import StepTwoContent from "./step-two-content";
 
 const steps = [
     {
-        label: 'Configure runnable projects',
+        label: 'Set runnable projects',
     },
     {
         label: 'Select a command to execute',

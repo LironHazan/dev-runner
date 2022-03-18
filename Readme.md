@@ -1,10 +1,19 @@
 # dev-runner 
 
-TBD
+Enter a list of <= 4 local node based projects and execute concurrently via the runner ui.
+
+#### Runner UI 
+Simple React based interface. 
+
+#### Runner API
+Local actix-web server.
+
 
 Development: 
 
-``cargo watch -x run``
+server on watch mode: ``cargo watch -x run``
+
+frontend dev-server: ``yarn dev``
 
 Build image + start the container: 
 ```shell

@@ -2,6 +2,15 @@
   width: 600px;
 }
 
+.alertPos {
+  width: 600px;
+  transform: translateY(5px);
+}
+
+.btnPos {
+  transform: translateY(10px);
+}
+
 .nextButtonsG {
   padding-top: 10px;
 }
