@@ -16,7 +16,7 @@ pub struct BasicResponse {
 pub async fn get_commands() -> web::Json<PartialPkgJSON> {
     // todo: read commands of stored file paths (app context)
     let res =
-        parse_package_json("/Users/lironh/dev-liron/dev-runner/dev-runner/webapp/package.json");
+        parse_package_json("____");
     let mut response: PartialPkgJSON = PartialPkgJSON {
         name: Default::default(),
         scripts: Default::default(),

@@ -1,6 +1,13 @@
 # dev-runner 
 
+WIP
+
 Enter a list of <= 4 local node based projects and execute concurrently via the runner ui.
+
+Motivation - none, just for fun.. 
+
+Disclaimer - Local dev server only, shouldn't be taken to "production", the executed get_commands
+are according to what the user specified, there's no way of running other sys commands nor injecting any scripts...
 
 #### Runner UI 
 Simple React based interface. 
