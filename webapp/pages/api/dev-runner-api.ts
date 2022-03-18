@@ -10,7 +10,7 @@ export function setRunnableProject(path: string): Promise<{msg: string}> {
     }).then(data => data?.json())
 }
 
-export function getCommands(): Promise<string[]> {
-    return fetch('http://localhost:8080/list')
+export function getCommands(): Promise<{scripts: string[]}> {
+    return fetch('http://localhost:8080/get-commands')
         .then(data => data.json())
 }

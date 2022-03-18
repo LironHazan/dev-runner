@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import {List, ListItem, ListItemText, TextField} from "@mui/material";
 import styles from '../../styles/Stepper.module.css'
 import {useEffect} from "react";
+import {getCommands} from "../api/dev-runner-api";
 
 
 export default function StepTwoContent() {
@@ -11,15 +12,13 @@ export default function StepTwoContent() {
     const [commands, setCommands] = React.useState(['']);
 
     useEffect(() => {
-        updateCommands();
+        getCommands().then((res: {scripts: string[]}) => {
+            setCommands(res?.scripts)
+        });
     }, [])
 
-    const updateCommands = () => {
-        setCommands(['start', 'build', 'publish'])
-    }
-
     const renderCommands = () =>
-        commands.map((value, index)  =>
+        commands?.map((value, index)  =>
              (<ListItem key={index}>
                     <ListItemText primary={value}/>
                 </ListItem>));
