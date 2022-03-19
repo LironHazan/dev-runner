@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import styles from '../../styles/Stepper.module.css'
 import StepOneContent from "./step-one-content";
 import StepTwoContent from "./step-two-content";
+import {execScript} from "../api/dev-runner-api";
 
 const steps = [
     {
@@ -25,6 +26,12 @@ export default function VerticalLinearStepper() {
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        // todo: remove tmp code
+        if (activeStep === steps.length - 1) {
+            execScript('dev').then((done) => {
+                console.log(done);
+            })
+        }
     };
 
     const handleBack = () => {

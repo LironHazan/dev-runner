@@ -2,7 +2,8 @@ use std::sync::RwLock;
 use crate::pkg_json_utils::{ Configuration, Scripts };
 use actix_web::{get, post, web, Either, Error, HttpResponse};
 use serde::{Deserialize, Serialize};
-use crate::{pkg_json_utils, RunnerContext};
+use crate::{pkg_json_utils, RunnerContext, command_exec_utils};
+use crate::command_exec_utils::Script;
 
 // POST: url: /set-runnable-project, payload: { path: string }
 // DELETE: url: /remove-runnable-project, payload: { path: string }
@@ -39,4 +40,21 @@ pub async fn set_runnable_project(
             msg: "OK".parse().unwrap(),
         })))
     }
+}
+
+#[post("/exec-command")]
+pub async fn exec_command(context: web::Data<RwLock<RunnerContext>>, payload: web::Json<Script>)
+    -> web::Json<BasicResponse> {
+
+    let projects = context
+        .read()
+        .unwrap()
+        .projects.clone();
+
+        // command_exec_utils::exec_scripts("dev", projects);
+
+        web::Json(BasicResponse {
+            msg: "run".parse().unwrap(),
+        })
+
 }
