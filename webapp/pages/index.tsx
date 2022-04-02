@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Main.module.css'
 import VerticalLinearStepper from "./runner-stepper/stepper";
 
 const Home: NextPage = () => {

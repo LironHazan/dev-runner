@@ -5,8 +5,11 @@ import {Alert, List, ListItem, ListItemText, TextField} from "@mui/material";
 import styles from '../../styles/Stepper.module.css'
 import {setRunnableProject} from "../api/dev-runner-api";
 
+interface StepOneProps {
+    enableContinue: (enableContinueBtn: boolean) => void;
+}
 
-export default function StepOneContent() {
+export default function StepOneContent({enableContinue}: StepOneProps) {
 
     const [errMsg, setError] = React.useState('');
     const [path, setPath] = React.useState('');
@@ -25,6 +28,7 @@ export default function StepOneContent() {
                 const response = await setRunnableProject(path);
                 // Won't push new path in case its invalid
                 response && setPaths([...paths, path]);
+                enableContinue(true);
             } catch (e) {
                 setError('Invalid filepath!');
             }
@@ -39,7 +43,7 @@ export default function StepOneContent() {
 
 
     return (
-            <StepContent>
+            <StepContent className="stepOne">
                 <TextField
                     className={styles.textField}
                     value={path}

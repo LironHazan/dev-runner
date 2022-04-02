@@ -7,10 +7,10 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import styles from '../../styles/Stepper.module.css'
 import StepOneContent from "./step-one-content";
 import StepTwoContent from "./step-two-content";
 import {execScript} from "../api/dev-runner-api";
+import styles from '../../styles/Stepper.module.css'
 
 const steps = [
     {
@@ -23,6 +23,7 @@ const steps = [
 
 export default function VerticalLinearStepper() {
     const [activeStep, setActiveStep] = React.useState(0);
+    const [activeContinueBtn, setContinue] = React.useState(false);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -36,6 +37,8 @@ export default function VerticalLinearStepper() {
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        // todo: better to move this
+        setContinue(false);
     };
 
     const handleReset = () => {
@@ -44,7 +47,7 @@ export default function VerticalLinearStepper() {
 
     return (
         <Box sx={{ maxWidth: 400 }}>
-            <Stepper activeStep={activeStep} orientation="vertical">
+            <Stepper activeStep={activeStep} orientation="vertical" className="stepper">
                 {steps.map((step, index) => (
                     <Step key={step.label}>
                         <StepLabel
@@ -57,11 +60,15 @@ export default function VerticalLinearStepper() {
                             {step.label}
                         </StepLabel>
                         <StepContent>
-                            { index === 0 ? (<StepOneContent/>) : null }
+                            { index === 0 ? (<StepOneContent enableContinue={(enableContinueBtn: boolean) => {
+                                setContinue(enableContinueBtn);
+                            }
+                            }/>) : null }
                             { index === 1 ? (<StepTwoContent/>) : null }
                             <Box sx={{ mb: 2 }}>
                                 <div className={styles.nextButtonsG}>
                                     <Button
+                                        disabled={!activeContinueBtn}
                                         variant="contained"
                                         onClick={handleNext}
                                         sx={{ mt: 1, mr: 1 }}
