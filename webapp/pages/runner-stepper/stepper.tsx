@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import StepOneContent from "./step-one-content";
 import StepTwoContent from "./step-two-content";
-import {execScript} from "../api/dev-runner-api";
+import {execScript} from "./dev-runner-api";
 import styles from '../../styles/Stepper.module.css'
 
 const steps = [

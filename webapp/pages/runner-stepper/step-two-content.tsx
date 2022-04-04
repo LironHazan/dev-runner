@@ -2,7 +2,7 @@ import { useState } from 'react';
 import StepContent from '@mui/material/StepContent';
 import {List, ListItem, ListItemText, TextField} from "@mui/material";
 import {useEffect} from "react";
-import {getCommands} from "../api/dev-runner-api";
+import {getCommands} from "./dev-runner-api";
 
 
 export default function StepTwoContent() {
