@@ -3,7 +3,7 @@ import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
 import {Alert, List, ListItem, ListItemText, TextField} from "@mui/material";
 import styles from '../../styles/Stepper.module.css'
-import {setRunnableProject} from "../api/dev-runner-api";
+import {setRunnableProject} from "./dev-runner-api";
 
 interface StepOneProps {
     enableContinue: (enableContinueBtn: boolean) => void;
