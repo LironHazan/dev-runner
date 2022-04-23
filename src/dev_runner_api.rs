@@ -1,9 +1,9 @@
-use std::sync::RwLock;
-use crate::pkg_json_utils::{ Configuration, Scripts };
+use crate::command_exec_utils::Script;
+use crate::pkg_json_utils::{Configuration, Scripts};
+use crate::{command_exec_utils, pkg_json_utils, RunnerContext};
 use actix_web::{get, post, web, Either, Error, HttpResponse};
 use serde::{Deserialize, Serialize};
-use crate::{pkg_json_utils, RunnerContext, command_exec_utils};
-use crate::command_exec_utils::Script;
+use std::sync::RwLock;
 
 // POST: url: /set-runnable-project, payload: { path: string }
 // DELETE: url: /remove-runnable-project, payload: { path: string }
@@ -17,10 +17,7 @@ pub struct BasicResponse {
 
 #[get("/get-commands")]
 pub async fn get_commands(context: web::Data<RwLock<RunnerContext>>) -> web::Json<Scripts> {
-    let projects = context
-        .read()
-        .unwrap()
-        .projects.clone();
+    let projects = context.read().unwrap().projects.clone();
 
     web::Json(Scripts {
         scripts: pkg_json_utils::extract_scripts(projects),
@@ -43,18 +40,15 @@ pub async fn set_runnable_project(
 }
 
 #[post("/exec-command")]
-pub async fn exec_command(context: web::Data<RwLock<RunnerContext>>, payload: web::Json<Script>)
-    -> web::Json<BasicResponse> {
+pub async fn exec_command(
+    context: web::Data<RwLock<RunnerContext>>,
+    payload: web::Json<Script>,
+) -> web::Json<BasicResponse> {
+    //let projects = context.read().unwrap().projects.clone();
 
-    let projects = context
-        .read()
-        .unwrap()
-        .projects.clone();
+    // command_exec_utils::exec_scripts("dev", projects);
 
-        // command_exec_utils::exec_scripts("dev", projects);
-
-        web::Json(BasicResponse {
-            msg: "run".parse().unwrap(),
-        })
-
+    web::Json(BasicResponse {
+        msg: "run".parse().unwrap(),
+    })
 }

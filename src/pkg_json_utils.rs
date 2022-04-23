@@ -19,7 +19,7 @@ pub struct Scripts {
     pub(crate) scripts: Vec<String>,
 }
 
-pub fn parse_package_json<'a>(filepath: &str) -> Result<PartialPkgJSON, &'static str> {
+pub fn parse_package_json(filepath: &str) -> Result<PartialPkgJSON, &'static str> {
     let json_file_path = Path::new(filepath).join("package.json");
     let file = File::open(json_file_path).map_err(|_| "Please specify a valid file name")?;
     let entries: PartialPkgJSON =
