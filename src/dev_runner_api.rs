@@ -1,4 +1,4 @@
-use crate::command_exec_utils::Script;
+use crate::command_exec_utils::{Script};
 use crate::pkg_json_utils::{Configuration, Scripts};
 use crate::{command_exec_utils, pkg_json_utils, RunnerContext};
 use actix_web::{get, post, web, Either, Error, HttpResponse};
@@ -18,7 +18,6 @@ pub struct BasicResponse {
 #[get("/get-commands")]
 pub async fn get_commands(context: web::Data<RwLock<RunnerContext>>) -> web::Json<Scripts> {
     let projects = context.read().unwrap().projects.clone();
-
     web::Json(Scripts {
         scripts: pkg_json_utils::extract_scripts(projects),
     })
@@ -44,9 +43,13 @@ pub async fn exec_command(
     context: web::Data<RwLock<RunnerContext>>,
     payload: web::Json<Script>,
 ) -> web::Json<BasicResponse> {
-    //let projects = context.read().unwrap().projects.clone();
+    let active_processes = context.write().unwrap().child_processes.clone();
+    command_exec_utils::terminate_all(&active_processes);
 
-    // command_exec_utils::exec_scripts("dev", projects);
+    let projects = context.read().unwrap().projects.clone();
+    if let Some(ids) = command_exec_utils::exec_scripts(&payload.script, projects) {
+        context.write().unwrap().child_processes = ids;
+    };
 
     web::Json(BasicResponse {
         msg: "run".parse().unwrap(),
