@@ -1,33 +1,51 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
-use std::process::Command;
-use std::{error::Error};
+use std::collections::HashMap;
+use std::path::{Path, PathBuf};
+use std::process::{Child, Command};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Script {
     pub(crate) script: String,
 }
 
-pub fn exec_scripts(command: &str, projects: Vec<String>) -> Result<(), Box<dyn Error>> {
-   // let result: Map<String, Value> = Map::new();
-   let output = Command::new("npm").arg("run").arg(command).output()?;
+pub fn exec_scripts(command: &str, projects: Vec<String>) -> Option<HashMap<String, String>> {
+    let mut ids: HashMap<String, String> = HashMap::new();
 
-    println!("{:?}", projects);
-    if !output.status.success() {
-        println!("Command executed with failing error code");
+    for p in projects {
+        let child = exec_script(command, p.as_str());
+        ids.insert(p, child.id().to_string());
     }
 
-    String::from_utf8(output.stdout)?
-        .lines()
-        .take(5)
-        .for_each(|x| println!("{:?}", x));
+    Some(ids)
+}
 
+fn exec_script(command: &str, p: &str) -> Child {
+    println!("path {:?}", p);
 
-    // for p in projects {
-    //     let output = Command::new("npm run command").arg("log").arg("--oneline").output()?;
-    //
-    //     println!("project {:?}", p);
-    // }
+    let _path = Path::new(p);
+    let execute_dir = PathBuf::from(_path);
 
-    Ok(())
+    println!("execute_dir {:?}", execute_dir);
+
+    Command::new("npm")
+        .arg("run")
+        .arg(command)
+        .current_dir(&execute_dir)
+        .spawn()
+        .expect("npm command failed to start")
+}
+
+fn kill_by_id(id: &str) -> Child {
+    println!("terminating process: {}", id);
+    Command::new("kill")
+        .arg(id)
+        .spawn()
+        .expect("failed to kill process")
+}
+
+pub fn terminate_all(child_processes: &HashMap<String, String>) {
+    if child_processes.is_empty() { return };
+    for pid in child_processes.values() {
+        kill_by_id(pid);
+    }
 }

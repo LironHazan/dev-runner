@@ -1,15 +1,17 @@
-use std::sync::RwLock;
 use actix_cors::Cors;
-use actix_web::{http::header, middleware::Logger, App, HttpServer, web};
+use actix_web::{http::header, middleware::Logger, web, App, HttpServer};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::sync::RwLock;
 
+mod command_exec_utils;
 mod dev_runner_api;
 mod pkg_json_utils;
-mod command_exec_utils;
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct RunnerContext {
     projects: Vec<String>,
+    child_processes: HashMap<String, String>,
 }
 
 #[actix_web::main]
@@ -19,6 +21,7 @@ async fn main() -> std::io::Result<()> {
 
     let runner_context = web::Data::new(RwLock::new(RunnerContext {
         projects: Vec::new(),
+        child_processes: HashMap::default(),
     }));
 
     HttpServer::new(move || {

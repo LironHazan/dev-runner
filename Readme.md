@@ -16,9 +16,12 @@ Simple React based interface.
 Local actix-web server.
 
 
-Development: 
+### Development: 
 
 server on watch mode: ``cargo watch -x run``
+
+format by running: `cargo fmt`
+lint by running: `cargo clippy`
 
 frontend dev-server: ``yarn dev``
 
