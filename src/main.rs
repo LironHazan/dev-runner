@@ -19,6 +19,10 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix=info");
     env_logger::init();
 
+    start_server().await
+}
+
+async fn start_server() -> std::io::Result<()> {
     let runner_context = web::Data::new(RwLock::new(RunnerContext {
         projects: Vec::new(),
         child_processes: HashMap::default(),
@@ -29,7 +33,6 @@ async fn main() -> std::io::Result<()> {
             .app_data(runner_context.clone())
             .wrap(
                 Cors::default()
-                    //todo: add configuration/env file
                     .allowed_origin("http://localhost:3000")
                     .allowed_methods(vec!["GET", "POST", "DELETE"])
                     .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
@@ -43,7 +46,7 @@ async fn main() -> std::io::Result<()> {
             .service(dev_runner_api::get_commands)
             .service(dev_runner_api::exec_command)
     })
-    .bind(("0.0.0.0", 8080))?
-    .run()
-    .await
+        .bind(("0.0.0.0", 8080))?
+        .run()
+        .await
 }
