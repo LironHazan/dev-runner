@@ -9,6 +9,7 @@ pub struct Script {
 }
 
 pub fn exec_scripts(command: &str, projects: Vec<String>) -> Option<HashMap<String, String>> {
+    if cfg!(target_os = "windows") { return None };
     let mut ids: HashMap<String, String> = HashMap::new();
 
     for p in projects {
@@ -20,8 +21,6 @@ pub fn exec_scripts(command: &str, projects: Vec<String>) -> Option<HashMap<Stri
 }
 
 fn exec_script(command: &str, p: &str) -> Child {
-    println!("path {:?}", p);
-
     let _path = Path::new(p);
     let execute_dir = PathBuf::from(_path);
 
@@ -44,7 +43,7 @@ fn kill_by_id(id: &str) -> Child {
 }
 
 pub fn terminate_all(child_processes: &HashMap<String, String>) {
-    if child_processes.is_empty() { return };
+    if child_processes.is_empty() || cfg!(target_os = "windows") { return };
     for pid in child_processes.values() {
         kill_by_id(pid);
     }
