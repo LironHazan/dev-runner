@@ -10,18 +10,18 @@ pub struct Configuration {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PartialPkgJSON {
-    pub(crate) name: String,
-    pub(crate) scripts: Map<String, Value>,
+    pub name: String,
+    pub scripts: Map<String, Value>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Scripts {
-    pub(crate) scripts: Vec<String>,
+    pub scripts: Vec<String>,
 }
 
-pub fn parse_package_json(filepath: &str) -> Result<PartialPkgJSON, &'static str> {
-    let json_file_path = Path::new(filepath).join("package.json");
-    let file = File::open(json_file_path).map_err(|_| "Please specify a valid file name")?;
+pub fn parse_package_json(dir_path: &str) -> Result<PartialPkgJSON, &'static str> {
+    let file_path = Path::new(dir_path).join("package.json");
+    let file = File::open(file_path).map_err(|_| "Please specify a valid file name")?;
     let entries: PartialPkgJSON =
         serde_json::from_reader(file).map_err(|_| "Error reading file")?;
     Ok(entries)
