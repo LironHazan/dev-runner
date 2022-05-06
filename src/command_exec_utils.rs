@@ -5,7 +5,7 @@ use std::process::{Child, Command};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Script {
-    pub(crate) script: String,
+    pub script: String,
 }
 
 pub fn exec_scripts(command: &str, projects: Vec<String>) -> Option<HashMap<String, String>> {

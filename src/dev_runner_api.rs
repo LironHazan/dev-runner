@@ -52,6 +52,6 @@ pub async fn exec_command(
     };
 
     web::Json(BasicResponse {
-        msg: "run".parse().unwrap(),
+        msg: (payload.script).parse().unwrap(),
     })
 }
