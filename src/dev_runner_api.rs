@@ -1,4 +1,4 @@
-use crate::command_exec_utils::{Script};
+use crate::command_exec_utils::Script;
 use crate::pkg_json_utils::{Configuration, Scripts};
 use crate::{command_exec_utils, pkg_json_utils, RunnerContext};
 use actix_web::{get, post, web, Either, Error, HttpResponse};
@@ -16,7 +16,7 @@ pub struct BasicResponse {
 }
 
 #[get("/get-commands")]
-pub async fn get_commands(context: web::Data<RwLock<RunnerContext>>) -> web::Json<Scripts> {
+async fn get_commands(context: web::Data<RwLock<RunnerContext>>) -> web::Json<Scripts> {
     let projects = context.read().unwrap().projects.clone();
     web::Json(Scripts {
         scripts: pkg_json_utils::extract_scripts(projects),
@@ -24,7 +24,7 @@ pub async fn get_commands(context: web::Data<RwLock<RunnerContext>>) -> web::Jso
 }
 
 #[post("/set-runnable-project")]
-pub async fn set_runnable_project(
+async fn set_runnable_project(
     context: web::Data<RwLock<RunnerContext>>,
     payload: web::Json<Configuration>,
 ) -> Either<HttpResponse, Result<web::Json<BasicResponse>, Error>> {
@@ -39,7 +39,7 @@ pub async fn set_runnable_project(
 }
 
 #[post("/exec-command")]
-pub async fn exec_command(
+async fn exec_command(
     context: web::Data<RwLock<RunnerContext>>,
     payload: web::Json<Script>,
 ) -> web::Json<BasicResponse> {
@@ -54,4 +54,10 @@ pub async fn exec_command(
     web::Json(BasicResponse {
         msg: (payload.script).parse().unwrap(),
     })
+}
+
+pub fn register_routes(service_config: &mut web::ServiceConfig) {
+    service_config.service(get_commands);
+    service_config.service(set_runnable_project);
+    service_config.service(exec_command);
 }
