@@ -30,6 +30,7 @@ async fn start_server() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+            .configure(dev_runner_api::register_routes)
             .app_data(runner_context.clone())
             .wrap(
                 Cors::default()
@@ -41,12 +42,8 @@ async fn start_server() -> std::io::Result<()> {
                     .max_age(3600),
             )
             .wrap(Logger::default())
-            //todo: there should be a way of listing all APIs in a single place (??)
-            .service(dev_runner_api::set_runnable_project)
-            .service(dev_runner_api::get_commands)
-            .service(dev_runner_api::exec_command)
     })
-        .bind(("0.0.0.0", 8080))?
-        .run()
-        .await
+    .bind(("0.0.0.0", 8080))?
+    .run()
+    .await
 }
