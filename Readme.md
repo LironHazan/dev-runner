@@ -31,3 +31,19 @@ docker build -t rust-dev-runner .
 
 docker run -d -p 8080:8080 rust-dev-runner
 ```
+
+##### Postgres db:
+
+Globally install diesel-cli:
+
+``cargo install diesel_cli --no-default-features --features postgres``
+
+Run db from container:
+
+``docker run --rm -P -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD="1234" --name pg postgres:alpine
+``
+
+Create migrations: 
+1. `` diesel setup   ``
+2. ``diesel migration generate runner``
+3. ``diesel migration run`` will generate schema.rs 

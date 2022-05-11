@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate diesel;
+
 use actix_cors::Cors;
 use actix_web::{http::header, middleware::Logger, web, App, HttpServer};
 use dotenv::dotenv;
@@ -5,10 +8,11 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::env;
 use std::sync::RwLock;
+use crate::runner::register_routes;
 
-mod command_exec_utils;
-mod dev_runner_api;
-mod pkg_json_utils;
+mod runner;
+mod schema;
+mod db;
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct RunnerContext {
@@ -19,6 +23,7 @@ pub struct RunnerContext {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
+   // db::establish_connection();
     env_logger::init();
 
     start_server().await
@@ -46,7 +51,7 @@ async fn start_server() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .configure(dev_runner_api::register_routes)
+            .configure(register_routes)
             .app_data(runner_context.clone())
             .wrap(cors())
             .wrap(Logger::default())
