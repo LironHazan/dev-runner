@@ -23,7 +23,7 @@ pub struct RunnerContext {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
-   // db::establish_connection();
+    db::establish_connection();
     env_logger::init();
 
     start_server().await
