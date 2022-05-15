@@ -2,6 +2,7 @@ use actix_web::{get, post, web, Either, Error, HttpResponse};
 use serde::{Deserialize, Serialize};
 use std::sync::RwLock;
 use crate::runner::{command_exec_utils, Configuration, pkg_json_utils, Script, Scripts};
+use crate::runner::script_exec_model::save_script_entry;
 use crate::RunnerContext;
 
 // POST: url: /set-runnable-project, payload: { path: string }
@@ -48,6 +49,8 @@ async fn exec_command(
     let projects = context.read().unwrap().projects.clone();
     if let Some(ids) = command_exec_utils::exec_scripts(&payload.script, projects) {
         context.write().unwrap().child_processes = ids;
+        // auditing
+        save_script_entry(&payload.script);
     };
 
     web::Json(BasicResponse {
