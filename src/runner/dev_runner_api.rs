@@ -1,9 +1,9 @@
+use crate::runner::script_exec_model::save_script_entry;
+use crate::runner::{pkg_json_utils, scripts_exec_utils, Configuration, Script, Scripts};
+use crate::RunnerContext;
 use actix_web::{get, post, web, Either, Error, HttpResponse};
 use serde::{Deserialize, Serialize};
 use std::sync::RwLock;
-use crate::runner::{scripts_exec_utils, Configuration, pkg_json_utils, Script, Scripts};
-use crate::runner::script_exec_model::save_script_entry;
-use crate::RunnerContext;
 
 // POST: url: /set-runnable-project, payload: { path: string }
 // DELETE: url: /remove-runnable-project, payload: { path: string }
@@ -51,8 +51,8 @@ async fn exec_command(
         context.write().unwrap().child_processes = ids;
         // auditing
         match save_script_entry(&payload.script) {
-            Ok(result)  => println!("created script entry: {:?}", result),
-            Err(e) =>  println!("error creating script entry: {:?}", e),
+            Ok(result) => println!("created script entry: {:?}", result),
+            Err(e) => println!("error creating script entry: {:?}", e),
         };
     };
 

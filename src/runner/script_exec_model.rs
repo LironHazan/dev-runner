@@ -1,6 +1,6 @@
-use chrono::{DateTime, Utc};
-use crate::schema::scripts_exec_log;
 use crate::db::establish_connection;
+use crate::schema::scripts_exec_log;
+use chrono::Utc;
 use diesel::prelude::*;
 
 #[derive(Insertable)]
@@ -14,7 +14,7 @@ pub struct NewScript<'a> {
 pub struct Script<'a> {
     pub id: i32,
     pub script_name: &'a str,
-    pub run_start: &'a chrono::NaiveDateTime
+    pub run_start: &'a chrono::NaiveDateTime,
 }
 
 pub fn save_script_entry(name: &str) -> QueryResult<usize> {
@@ -23,7 +23,7 @@ pub fn save_script_entry(name: &str) -> QueryResult<usize> {
     let connection = establish_connection();
     let new_script = NewScript {
         script_name: name,
-        run_start: &Utc::now().naive_utc()
+        run_start: &Utc::now().naive_utc(),
     };
 
     diesel::insert_into(scripts_exec_log::table)
