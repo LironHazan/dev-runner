@@ -8,20 +8,6 @@ pub struct Script {
     pub script: String,
 }
 
-pub fn exec_scripts(command: &str, projects: Vec<String>) -> Option<HashMap<String, String>> {
-    if cfg!(target_os = "windows") {
-        return None;
-    };
-    let mut ids: HashMap<String, String> = HashMap::new();
-
-    for p in projects {
-        let child = exec_script(command, p.as_str());
-        ids.insert(p, child.id().to_string());
-    }
-
-    Some(ids)
-}
-
 fn exec_script(command: &str, p: &str) -> Child {
     let _path = Path::new(p);
     let execute_dir = PathBuf::from(_path);
@@ -42,6 +28,20 @@ fn kill_by_id(id: &str) -> Child {
         .arg(id)
         .spawn()
         .expect("failed to kill process")
+}
+
+pub fn exec_scripts(command: &str, projects: Vec<String>) -> Option<HashMap<String, String>> {
+    if cfg!(target_os = "windows") {
+        return None;
+    };
+    let mut ids: HashMap<String, String> = HashMap::new();
+
+    for p in projects {
+        let child = exec_script(command, p.as_str());
+        ids.insert(p, child.id().to_string());
+    }
+
+    Some(ids)
 }
 
 pub fn terminate_all(child_processes: &HashMap<String, String>) {

@@ -1,7 +1,7 @@
 use actix_web::{get, post, web, Either, Error, HttpResponse};
 use serde::{Deserialize, Serialize};
 use std::sync::RwLock;
-use crate::runner::{command_exec_utils, Configuration, pkg_json_utils, Script, Scripts};
+use crate::runner::{scripts_exec_utils, Configuration, pkg_json_utils, Script, Scripts};
 use crate::runner::script_exec_model::save_script_entry;
 use crate::RunnerContext;
 
@@ -44,13 +44,16 @@ async fn exec_command(
     payload: web::Json<Script>,
 ) -> web::Json<BasicResponse> {
     let active_processes = context.write().unwrap().child_processes.clone();
-    command_exec_utils::terminate_all(&active_processes);
+    scripts_exec_utils::terminate_all(&active_processes);
 
     let projects = context.read().unwrap().projects.clone();
-    if let Some(ids) = command_exec_utils::exec_scripts(&payload.script, projects) {
+    if let Some(ids) = scripts_exec_utils::exec_scripts(&payload.script, projects) {
         context.write().unwrap().child_processes = ids;
         // auditing
-        save_script_entry(&payload.script);
+        match save_script_entry(&payload.script) {
+            Ok(result)  => println!("created script entry: {:?}", result),
+            Err(e) =>  println!("error creating script entry: {:?}", e),
+        };
     };
 
     web::Json(BasicResponse {

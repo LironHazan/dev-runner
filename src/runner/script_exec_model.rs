@@ -17,9 +17,8 @@ pub struct Script<'a> {
     pub run_start: &'a chrono::NaiveDateTime
 }
 
-pub fn save_script_entry(name: &str) {
+pub fn save_script_entry(name: &str) -> QueryResult<usize> {
     println!("Creating script entry: {:?}", name);
-  // use crate::schema::scripts_exec_log::dsl::*;
 
     let connection = establish_connection();
     let new_script = NewScript {
@@ -30,5 +29,4 @@ pub fn save_script_entry(name: &str) {
     diesel::insert_into(scripts_exec_log::table)
         .values(&new_script)
         .execute(&connection)
-        .expect("Error saving new entry");
 }
