@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate diesel;
 
+use crate::runner::register_routes;
 use actix_cors::Cors;
 use actix_web::{http::header, middleware::Logger, web, App, HttpServer};
 use dotenv::dotenv;
@@ -8,11 +9,10 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::env;
 use std::sync::RwLock;
-use crate::runner::register_routes;
 
+mod db;
 mod runner;
 mod schema;
-mod db;
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct RunnerContext {
