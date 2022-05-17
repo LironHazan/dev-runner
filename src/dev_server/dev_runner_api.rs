@@ -1,9 +1,10 @@
-use crate::runner::script_exec_model::save_script_entry;
+use crate::runner::script_exec_model::{save_script_entry, Pool};
 use crate::runner::{pkg_json_utils, scripts_exec_utils, Configuration, Script, Scripts};
-use crate::RunnerContext;
 use actix_web::{get, post, web, Either, Error, HttpResponse};
 use serde::{Deserialize, Serialize};
 use std::sync::RwLock;
+use either::Left;
+use crate::dev_server::server::RunnerContext;
 
 // POST: url: /set-runnable-project, payload: { path: string }
 // DELETE: url: /remove-runnable-project, payload: { path: string }
@@ -40,6 +41,7 @@ async fn set_runnable_project(
 
 #[post("/exec-command")]
 async fn exec_command(
+    pool: web::Data<Pool>,
     context: web::Data<RwLock<RunnerContext>>,
     payload: web::Json<Script>,
 ) -> web::Json<BasicResponse> {
@@ -50,7 +52,7 @@ async fn exec_command(
     if let Some(ids) = scripts_exec_utils::exec_scripts(&payload.script, projects) {
         context.write().unwrap().child_processes = ids;
         // auditing
-        match save_script_entry(&payload.script) {
+        match save_script_entry(&payload.script, Left(pool)) {
             Ok(result) => println!("created script entry: {:?}", result),
             Err(e) => println!("error creating script entry: {:?}", e),
         };
