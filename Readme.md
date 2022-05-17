@@ -2,6 +2,9 @@
 
 WIP
 
+![](dev-runner.gif)
+
+
 Enter a list of <= 4 local node based projects and execute concurrently via the runner ui.
 
 Motivation - none, just for fun.. 
