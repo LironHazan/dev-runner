@@ -31,9 +31,11 @@ fn kill_by_id(id: &str) -> Child {
 }
 
 pub fn exec_scripts(command: &str, projects: Vec<String>) -> Option<HashMap<String, String>> {
-    if cfg!(target_os = "windows") {
+     //todo replace some with result to handle the projects count limitation error
+    if projects.len() > 4 || cfg!(target_os = "windows") {
         return None;
     };
+
     let mut ids: HashMap<String, String> = HashMap::new();
 
     for p in projects {
