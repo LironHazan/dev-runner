@@ -53,7 +53,7 @@ pub async fn start() -> std::io::Result<()> {
             .wrap(cors())
             .wrap(Logger::default())
     })
-        .bind(format!("{}:{}", host, port))?
-        .run()
-        .await
+    .bind(format!("{}:{}", host, port))?
+    .run()
+    .await
 }
