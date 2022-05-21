@@ -53,4 +53,6 @@ Create migrations:
 
 Running using a CLI 
 
+In .env set IS_CLI_MODE=true and run:
+
 ```cargo install --path . && dev-runner --help```
