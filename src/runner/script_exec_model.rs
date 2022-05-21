@@ -1,5 +1,5 @@
-use actix_web::web;
 use crate::schema::scripts_exec_log;
+use actix_web::web;
 use chrono::Utc;
 use diesel::prelude::*;
 use diesel::{r2d2::ConnectionManager, PgConnection};
@@ -21,7 +21,10 @@ pub struct Script<'a> {
     pub run_start: &'a chrono::NaiveDateTime,
 }
 
-pub fn save_script_entry(name: &str, either_conn: Either<web::Data<Pool>, PgConnection>) -> QueryResult<usize> {
+pub fn save_script_entry(
+    name: &str,
+    either_conn: Either<web::Data<Pool>, PgConnection>,
+) -> QueryResult<usize> {
     println!("Creating script entry: {:?}", name);
 
     let new_script = NewScript {
@@ -40,5 +43,4 @@ pub fn save_script_entry(name: &str, either_conn: Either<web::Data<Pool>, PgConn
             .values(&new_script)
             .execute(right)
     }
-
 }

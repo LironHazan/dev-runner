@@ -50,3 +50,9 @@ Create migrations:
 1. `` diesel setup   ``
 2. ``diesel migration generate runner``
 3. ``diesel migration run`` will generate schema.rs 
+
+Running using a CLI 
+
+In .env set IS_CLI_MODE=true and run:
+
+```cargo install --path . && dev-runner --help```
