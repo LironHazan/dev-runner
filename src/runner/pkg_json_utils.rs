@@ -56,14 +56,22 @@ pub fn extract_scripts(projects: Vec<String>) -> Vec<String> {
     commands
 }
 
+
+//todo: consider having the module in a separate file
+#[cfg(test)]
+mod tests {
 // #[test]
 // fn test_parse_package_json() {
 //     let result = parse_package_json("foo/bar");
 //     assert_eq!(result.unwrap(), "Please specify a valid file name");
 // }
 
-#[test]
-fn test_is_valid_path() {
-    let is_valid = is_valid_path("foo/bar");
-    assert_eq!(is_valid, false);
+    use crate::runner::is_valid_path;
+
+    #[test]
+    fn test_is_valid_path() {
+        let is_valid = is_valid_path("foo/bar");
+        assert_eq!(is_valid, false);
+    }
 }
+
