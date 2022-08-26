@@ -2,3 +2,4 @@
 .idea
 webapp/node_modules
 webapp/.next
+ui/node_modules
