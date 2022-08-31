@@ -3,8 +3,12 @@
     windows_subsystem = "windows"
 )]
 
-mod pkg_json_utils;
-mod scripts_exec_utils;
+use crate::scripts_runner::Runner;
+use crate::pkg_json_utils::PkgJsonHandler;
+
+pub mod bun;
+pub mod pkg_json_utils;
+pub mod scripts_runner;
 use std::sync::{Arc, Mutex};
 use std::collections::HashMap;
 
@@ -15,8 +19,9 @@ pub struct RunnerState {
 
 #[tauri::command]
 fn get_commands(state: tauri::State<RunnerState>) -> Vec<String> {
+    let pkg_json_handler = PkgJsonHandler::default();
     let projects = state.projects.lock().unwrap();
-    pkg_json_utils::extract_scripts(projects.to_vec())
+    pkg_json_handler.extract_scripts(projects.to_vec())
 }
 
 #[tauri::command]
@@ -24,19 +29,23 @@ fn exec_command(
     command: &str,
     state: tauri::State<RunnerState>
 ) -> String {
-    let mut active_processes = state.child_processes.lock().unwrap();
-    scripts_exec_utils::terminate_all(&active_processes);
+    let mut runner = Runner::default();
+    let active_processes = state.child_processes.lock().unwrap();
+    runner.terminate_all(&active_processes);
 
     let projects = state.projects.lock().unwrap();
-    if let Some(ids) = scripts_exec_utils::exec_scripts(&command, projects.to_vec()) {
-        // *state.child_processes.lock().unwrap() = ids;
-    };
+    runner.exec_scripts(&command, projects.to_vec());
+   //  if let Some(ids) = runner.exec_scripts(&command, projects.to_vec()) {
+   //      *state.child_processes.lock().unwrap() = ids;
+   // };
     "Running".to_string()
 }
 
 #[tauri::command]
 fn set_runnable_project(path: &str, state: tauri::State<RunnerState>) -> String {
-    if !pkg_json_utils::is_valid_path(&path) {
+    let pkg_json_handler = PkgJsonHandler::default();
+
+    if !pkg_json_handler.is_valid_path(&path) {
         "404".to_string()
     } else {
         let mut projects = state.projects.lock().unwrap();
