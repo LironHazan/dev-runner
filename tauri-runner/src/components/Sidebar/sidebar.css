@@ -1,11 +1,11 @@
-a {
+.link {
     text-transform: uppercase;
     text-decoration: none;
     color: #e7e8f2;
     font-size: 13px;
     opacity: 0.8;
 }
-a:hover {
+.link:hover {
     opacity: 1;
 }
 

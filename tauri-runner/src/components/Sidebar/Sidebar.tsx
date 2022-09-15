@@ -1,4 +1,5 @@
 import "./sidebar.css";
+import {Link} from "react-router-dom";
 
 function Sidebar() {
     return (<>
@@ -6,13 +7,10 @@ function Sidebar() {
 <nav className="nav-trans">
     <ul className="sidebar-items">
         <li className="sidebar-item">
-            <a href={'runner'}>Runner</a>
+            <Link to={'runner'}>Runner</Link>
         </li>
         <li className="sidebar-item">
-            <a href={'results-history'}>Results History</a>
-        </li>
-        <li className="sidebar-item">
-            <a href={'p3'}>Page 3</a>
+            <Link to={'results-history'}>Results History</Link>
         </li>
     </ul>
 </nav>
