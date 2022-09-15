@@ -1,21 +1,17 @@
-import { useState } from "react";
-import StepOneContent from "./step-one-content";
-import StepTwoContent from "./step-two-content";
+import { Outlet } from 'react-router-dom';
+import Sidebar from "./components/Sidebar/Sidebar";
+import "./app.css";
 
 function App() {
-    const [commands, setCommands] = useState([] as string[]);
-
-    const getCommands = (cmds: string[]) => {
-        setCommands(cmds);
-     }
   return (
-    <div className="container">
-      <h1> NPM Dev Runner (beta) </h1>
-
-      <StepOneContent liftCommands={getCommands}/>
-      <StepTwoContent commands={commands}/>
-
-    </div>
+    <>
+        <div id="sidebar">
+            <Sidebar />
+        </div>
+        <div id="detail">
+            <Outlet />
+        </div>
+    </>
   );
 }
 
